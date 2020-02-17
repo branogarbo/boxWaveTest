@@ -15,7 +15,7 @@
         createCanvas(windowWidth,windowHeight,WEBGL);
 
         cam = createCamera();
-        cam.setPosition(1000,-1000,1000);
+        cam.setPosition(1500,-1500,1500);
         cam.lookAt(0,0,0);
       }
 
@@ -30,11 +30,11 @@
         }
 
         let detail = 1;
-        let addHeight = 5;
+        let addHeight = 4;
 
         let t = (x,y) => createVector(100*x,0,-100*y);
         
-        let f = (x,y) => cos(sqrt(x**2+y**2)+millis()/300);
+        let f = (x,y) => cos(abs(sqrt(x**2+y**2))-millis()/500);
 
         for (x = bounds.x[0]*detail; x < bounds.x[1]*detail; x++) {
           for (y = bounds.y[0]*detail; y < bounds.y[1]*detail; y++) {
