@@ -1,0 +1,50 @@
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/p5.js"></script>
+    <style>
+      body {
+        margin:0;
+      }
+    </style>
+  </head>
+  <body>
+    
+    <script>
+      let cam;
+      function setup() {
+        createCanvas(windowWidth,windowHeight,WEBGL);
+
+        cam = createCamera();
+        cam.setPosition(1000,-1000,1000);
+        cam.lookAt(0,0,0);
+      }
+
+      function draw() {
+        background(0);
+        normalMaterial();
+        orbitControl(10);
+        
+        let bounds = {
+          x: [-6,7],
+          y: [-6,7]
+        }
+
+        let detail = 1;
+        let addHeight = 5;
+
+        let t = (x,y) => createVector(100*x,0,-100*y);
+        
+        let f = (x,y) => 2*cos(abs(sqrt(x**2+y**2))+millis()/300);
+
+        for (x = bounds.x[0]*detail; x < bounds.x[1]*detail; x++) {
+          for (y = bounds.y[0]*detail; y < bounds.y[1]*detail; y++) {
+            push();
+            translate(t(x/detail,y/detail));
+            box(100,100*(f(x/detail,y/detail)+addHeight),100);
+            pop();
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
