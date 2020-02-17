@@ -34,13 +34,13 @@
 
         let t = (x,y) => createVector(100*x,0,-100*y);
         
-        let f = (x,y) => 2*cos(abs(sqrt(x**2+y**2))+millis()/300);
+        let f = (x,y) => cos(sqrt(x**2+y**2)+millis()/300);
 
         for (x = bounds.x[0]*detail; x < bounds.x[1]*detail; x++) {
           for (y = bounds.y[0]*detail; y < bounds.y[1]*detail; y++) {
             push();
             translate(t(x/detail,y/detail));
-            box(100,100*(f(x/detail,y/detail)+addHeight),100);
+            box(100/detail,100*(2*f(x/detail,y/detail)+addHeight),100/detail);
             pop();
           }
         }
