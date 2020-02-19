@@ -1,6 +1,7 @@
 <html>
   <head>
     <script src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/p5.js"></script>
+    <script src="https://unpkg.com/p5.createloop@0.1.3/dist/p5.createloop.js"></script> 
     <style>
       body {
         margin:0;
@@ -8,40 +9,63 @@
     </style>
   </head>
   <body>
-    
     <script>
-      let cam;
       function setup() {
         createCanvas(windowWidth,windowHeight,WEBGL);
 
-        cam = createCamera();
-        cam.setPosition(1500,-1500,1500);
+        let cam = createCamera();
+        cam.setPosition(-1500,-1500,1500);
         cam.lookAt(0,0,0);
+
+        //createLoop({
+        //  duration: 3,
+        //  gif: true
+        //});
       }
 
       function draw() {
         background(0);
         normalMaterial();
         orbitControl(10);
+
+        let detail = 1;
+        let addHeight = 5;
         
         let bounds = {
           x: [-6,7],
           y: [-6,7]
         }
 
-        let detail = 1;
-        let addHeight = 4;
+        // curve bounds
+        //let conditions = (x,y) => (
+        //  y < (x**2)/5 + 5 &&
+        //  y > -(x**2)/5 - 5 &&
+        //  x > -(y**2)/5 - 5 &&
+        //  x < (y**2)/5 + 5 &&
+        //  x**2 + y**2 < 100
+        //);
+
+        let conditions = (x,y) => true;
 
         let t = (x,y) => createVector(100*x,0,-100*y);
         
-        let f = (x,y) => cos(abs(sqrt(x**2+y**2))-millis()/500);
+        // old wave function with animLoop
+        //let f = (x,y) => cos(abs(sqrt(x**2+y**2))-animLoop.theta);
+
+        // updated wave function with millis()
+        let f = (x,y) => cos(millis()/500-(x**2+y**2)/10);
+
+        // updated wave function with animLoop
+        //let f = (x,y) => cos(animLoop.theta-(x**2+y**2)/10);
 
         for (x = bounds.x[0]*detail; x < bounds.x[1]*detail; x++) {
           for (y = bounds.y[0]*detail; y < bounds.y[1]*detail; y++) {
-            push();
-            translate(t(x/detail,y/detail));
-            box(100/detail,100*(2*f(x/detail,y/detail)+addHeight),100/detail);
-            pop();
+            if (conditions(x/detail,y/detail)) {
+              push();
+              translate(t(x/detail,y/detail));
+              box(100/detail,100*(2*f(x/detail,y/detail)+addHeight),100/detail);
+              pop();
+            }
           }
         }
       }
